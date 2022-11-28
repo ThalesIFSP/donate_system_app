@@ -3,6 +3,8 @@ import {
   GET_ALL_CHARITIES_ERROR,
   GET_CHARITY_NUMBER_SUCCESS,
   GET_CHARITY_NUMBER_ERROR,
+  GET_CHARITY_SUCCESS,
+  GET_CHARITY_ERROR,
 } from '../config/ActionConstant';
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
   numberCharity: null,
   getNumberSuccess: null,
   getNumberError: null,
+  getCharitySuccess: null,
+  getCharityError: null,
   errorMessage: null,
 };
 
@@ -43,6 +47,20 @@ const charity = (state = initialState, action) => {
         ...state,
         getNumberError: true,
         getNumberSuccess: false,
+        errorMessage: action.payload,
+      };
+    case GET_CHARITY_SUCCESS:
+      return {
+        ...state,
+        getCharityError: false,
+        getCharitySuccess: true,
+        charityData: action.payload,
+      };
+    case GET_CHARITY_ERROR:
+      return {
+        ...state,
+        getCharityError: true,
+        getCharitySuccess: false,
         errorMessage: action.payload,
       };
     default:

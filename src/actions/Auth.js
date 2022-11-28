@@ -90,7 +90,6 @@ export function editSendNotification(idUser, sendEmail, sendWhatsapp) {
 export function editUser(idUser, user) {
   return async dispatch => {
     try {
-      console.log(user);
       await request.auth.editUser(idUser, user);
       dispatch({
         type: EDIT_USER_SUCCESS,

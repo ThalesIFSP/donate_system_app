@@ -67,7 +67,6 @@ function Home(props) {
       if (getDonationNumberSuccess) {
         setDonationNumber(numberSolicitation);
       }
-      console.log(charityData);
     }
   }, [getAllFlag]);
 

@@ -10,6 +10,7 @@ import MyNotifications from '../screens/MyNotifications';
 import MyProfile from '../screens/MyProfile';
 import ModeratorSolicitation from '../screens/ModeratorSolicitation';
 import Suport from '../screens/Suport';
+import ModeratorDone from '../screens/ModeratorDone';
 
 export type HomeStackParamList = {
   MyDonations: undefined;
@@ -17,6 +18,7 @@ export type HomeStackParamList = {
   MyProfile: undefined;
   Profile: undefined;
   ModeratorSolicitation: undefined;
+  ModeratorDone: undefined;
   Suport: undefined;
 };
 
@@ -32,6 +34,7 @@ export function ProfileStack() {
       <Screen name="MyNotifications" component={MyNotifications} />
       <Screen name="MyProfile" component={MyProfile} />
       <Screen name="ModeratorSolicitation" component={ModeratorSolicitation} />
+      <Screen name="ModeratorDone" component={ModeratorDone} />
       <Screen name="Suport" component={Suport} />
     </Navigator>
   );

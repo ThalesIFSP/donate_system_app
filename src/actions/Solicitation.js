@@ -1,16 +1,32 @@
 import {
+  ACCEPT_SOLICITATION_ERROR,
+  ACCEPT_SOLICITATION_SUCCESS,
+  CANCEL_MOD_SOLICITATION_ERROR,
+  CANCEL_MOD_SOLICITATION_SUCCESS,
   CANCEL_SOLICITATION_ERROR,
   CANCEL_SOLICITATION_SUCCESS,
   CREATE_SOLICITATION_ERROR,
   CREATE_SOLICITATION_SUCCESS,
+  DONE_SOLICITATION_ERROR,
+  DONE_SOLICITATION_SUCCESS,
   GET_DONATION_NUMBER_ERROR,
   GET_DONATION_NUMBER_SUCCESS,
+  GET_MODERATOR_ERROR,
+  GET_MODERATOR_SUCCESS,
   GET_SOLICITATIONS_USER_ERROR,
   GET_SOLICITATIONS_USER_SUCCESS,
   GET_SOLICITATION_DETAIL_ERROR,
   GET_SOLICITATION_DETAIL_SUCCESS,
+  PENDING_SOLICITATION_ERROR,
+  PENDING_SOLICITATION_SUCCESS,
+  REFUSE_SOLICITATION_ERROR,
+  REFUSE_SOLICITATION_SUCCESS,
+  SOLICITATION_HISTORY_ERROR,
+  SOLICITATION_HISTORY_SUCCESS,
+  WAITING_SOLICITATION_ERROR,
+  WAITING_SOLICITATION_SUCCESS,
 } from '../config/ActionConstant';
-import request, {responseError} from '../services';
+import request from '../services';
 
 export function createSolicitation(
   address,
@@ -65,7 +81,6 @@ export function createSolicitation(
         }),
       );
 
-      console.log(formData);
       const res = await request.solicitation.createSolicitation(formData);
       const {data} = res;
 
@@ -145,6 +160,88 @@ export function getSolicitationDetail(solicitationId) {
   };
 }
 
+export function getPendingSolicitation(idModerator) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.getPendingSolicitation(
+        idModerator,
+      );
+      const {data} = res;
+
+      dispatch({
+        type: PENDING_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: PENDING_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function getWaitingSolicitation(idCharity) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.getWaitingSolicitation(idCharity);
+      const {data} = res;
+
+      dispatch({
+        type: WAITING_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: WAITING_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function getSolicitationHistory(idUser) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.getSolicitationHistory(idUser);
+      const {data} = res;
+
+      dispatch({
+        type: SOLICITATION_HISTORY_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: SOLICITATION_HISTORY_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function getModerator(idModerator) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.getModerator(idModerator);
+      const {data} = res;
+
+      dispatch({
+        type: GET_MODERATOR_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: GET_MODERATOR_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
 export function cancelSolicitation(solicitationId, idUser) {
   return async dispatch => {
     try {
@@ -162,6 +259,98 @@ export function cancelSolicitation(solicitationId, idUser) {
       console.log(error, '<---ERROR');
       dispatch({
         type: CANCEL_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function acceptSolicitation(solicitationId, moderatorId) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.acceptSolicitation(
+        solicitationId,
+        moderatorId,
+      );
+      const {data} = res;
+
+      dispatch({
+        type: ACCEPT_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: ACCEPT_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function refuseSolicitation(solicitationId, moderatorId) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.refuseSolicitation(
+        solicitationId,
+        moderatorId,
+      );
+      const {data} = res;
+
+      dispatch({
+        type: REFUSE_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: REFUSE_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function doneSolicitation(solicitationId, moderatorId) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.doneSolicitation(
+        solicitationId,
+        moderatorId,
+      );
+      const {data} = res;
+
+      dispatch({
+        type: DONE_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: DONE_SOLICITATION_ERROR,
+        payload: error,
+      });
+    }
+  };
+}
+
+export function cancelModeratorSolicitation(solicitationId, moderatorId) {
+  return async dispatch => {
+    try {
+      const res = await request.solicitation.cancelModeratorSolicitation(
+        solicitationId,
+        moderatorId,
+      );
+      const {data} = res;
+
+      dispatch({
+        type: CANCEL_MOD_SOLICITATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error, '<---ERROR');
+      dispatch({
+        type: CANCEL_MOD_SOLICITATION_ERROR,
         payload: error,
       });
     }

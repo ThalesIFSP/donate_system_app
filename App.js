@@ -20,7 +20,6 @@ if (!global.atob) {
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaView />
       <Routes />
     </Provider>
   );

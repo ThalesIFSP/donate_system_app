@@ -168,6 +168,7 @@ export const InstitutionLogo = styled.Image`
 export const InstitutionTextBox = styled.View`
   flex-direction: column;
   margin-left: 3%;
+  width: 80%;
 `;
 
 export const InstitutionText = styled(TextPoppins)`

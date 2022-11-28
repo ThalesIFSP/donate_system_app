@@ -12,7 +12,7 @@ export const Container = styled.ScrollView`
   background-color: white;
 `;
 
-export const BackBoxButton = styled.View`
+export const BackBoxButton = styled.TouchableOpacity`
   flex-direction: row;
   margin-top: ${height * 0.08}px;
   margin-left: 2%;

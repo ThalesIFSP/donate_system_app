@@ -148,7 +148,6 @@ function MyProfile(props) {
             data={[{title: 'WhatsApp', value: true}]}
             userOption={sendWhatsapp}
             setUserOption={async option => {
-              console.log(!!option);
               handleEditNotification(sendEmail, !!option);
               const newUser = userInfo;
               newUser.sendWhatsapp = !!option;

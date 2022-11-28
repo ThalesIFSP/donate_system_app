@@ -5,10 +5,6 @@ import TextPoppins from '../../components/TextPoppins';
 
 const {width, height} = Dimensions.get('window');
 
-interface StatusColorProps {
-  color: string;
-}
-
 export const Container = styled.View`
   flex: 1;
   padding: 0% 5% 10% 5%;
@@ -17,7 +13,7 @@ export const Container = styled.View`
 
 export const DonationList = styled.FlatList``;
 
-export const DonationBox = styled.TouchableOpacity`
+export const DonationButton = styled.TouchableOpacity`
   padding-top: 3%;
   padding-bottom: 3%;
   flex-direction: row;
@@ -37,58 +33,29 @@ export const DonationTitle = styled(TextPoppins)`
   font-size: ${RFValue(14)}px;
 `;
 
-export const DonationStatus = styled(TextPoppins)<StatusColorProps>`
+export const DonationStatus = styled(TextPoppins)`
   font-size: ${RFValue(14)}px;
-  color: ${({color}) => color};
+  color: rgba(0, 0, 0, 0.5);
 `;
 
-export const ModalContainer = styled.View`
-  flex: 1;
-  padding: 0% 5% 10% 5%;
+export const ContainerModal = styled.View`
+  padding: 1%;
 `;
 
-export const PickupLabel = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
-  margin-right: 2%;
-`;
-
-export const PickupText = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
-`;
-
-export const PickupModalBox = styled.View`
+export const TitleContainer = styled.View`
   flex-direction: row;
 `;
 
-export const StatusLabel = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
-  margin-right: 2%;
+export const NameModal = styled(TextPoppins)`
+  font-size: ${RFValue(24)}px;
+  margin: 3%;
 `;
 
-export const StatusText = styled(TextPoppins)<StatusColorProps>`
-  font-size: ${RFValue(16)}px;
-  color: ${({color}) => color};
-
+export const IconButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 5%;
+  top: 20%;
 `;
-
-export const StatusModalBox = styled.View`
-  flex-direction: row;
-`;
-
-export const AnonymousLabel = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
-  margin-right: 2%;
-`;
-
-export const AnonymousText = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
-`;
-
-export const AnonymousModalBox = styled.View`
-  flex-direction: row;
-`;
-
-//RenderPageItem
 
 export const PageModal = styled.View`
   width: ${width * 0.84}px;
@@ -122,12 +89,33 @@ export const AddressTextModal = styled(TextPoppins)`
   margin: 2%;
 `;
 
-export const CancelButton = styled.TouchableOpacity`
-  width: 100%;
-  background-color: '#FF0000';
-  text-align: center;
+export const BoxButton = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10%;
 `;
 
-export const CancelText = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
+export const AcceptButtonModal = styled.TouchableOpacity`
+  background-color: #589235;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 8%;
+  padding-right: 8%;
+`;
+export const AcceptTextButtonModal = styled(TextPoppins)`
+  color: white;
+  font-size: ${RFValue(18)}px;
+`;
+
+export const RefuseButtonModal = styled.TouchableOpacity`
+  background-color: transparent;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 8%;
+  padding-right: 8%;
+  border: 1px solid red;
+`;
+export const RefuseTextButtonModal = styled(TextPoppins)`
+  color: red;
+  font-size: ${RFValue(18)}px;
 `;

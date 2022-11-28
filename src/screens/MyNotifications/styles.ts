@@ -1,6 +1,9 @@
 import {RFValue} from 'react-native-responsive-fontsize';
+import {Dimensions} from 'react-native';
 import styled from 'styled-components/native';
 import TextPoppins from '../../components/TextPoppins';
+
+const {width, height} = Dimensions.get('window');
 
 export const Container = styled.View`
   flex: 1;
@@ -10,7 +13,7 @@ export const Container = styled.View`
 
 export const NotificationList = styled.FlatList``;
 
-export const NotificationBox = styled.View`
+export const NotificationButton = styled.TouchableOpacity`
   padding-top: 3%;
   padding-bottom: 7%;
   flex-direction: row;
@@ -33,4 +36,17 @@ export const NotificationTitle = styled(TextPoppins)`
 export const NotificationDate = styled(TextPoppins)`
   font-size: ${RFValue(14)}px;
   color: #666666;
+`;
+
+export const CharityBox = styled.View`
+  flex-direction: row;
+`;
+export const CharityLabel = styled(TextPoppins)`
+  font-size: ${RFValue(16)}px;
+  margin-right: 2%;
+`;
+export const CharityText = styled(TextPoppins)`
+  font-size: ${RFValue(16)}px;
+  margin-right: 2%;
+  width: ${width * 0.65}px;
 `;

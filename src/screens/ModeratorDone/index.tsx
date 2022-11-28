@@ -33,20 +33,22 @@ import {Dimensions, FlatList, Modal, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
-  getPendingSolicitation,
+  getWaitingSolicitation,
   getSolicitationDetail,
-  acceptSolicitation,
-  refuseSolicitation,
+  doneSolicitation,
+  cancelModeratorSolicitation,
+  getModerator,
 } from '../../actions/Solicitation';
 import {getUser} from '../../routes';
 
-function ModeratorSolicitation(props) {
+function ModeratorDone(props) {
   const [selectedSolicitation, setSelectedSolicitation] = useState();
   const [visible, setVisible] = useState(false);
   const [solicitationList, setSolicitationList] = useState([]);
   const [solicitationFlag, setSolicitationFlag] = useState(false);
   const [detailFlag, setDetailFlag] = useState(false);
   const [moderatorIdt, setModeratorIdt] = useState();
+  const [moderatorFlag, setModeratorFlag] = useState(false);
   const [acceptFlag, setAcceptFlag] = useState(false);
   const [refuseFlag, setRefuseFlag] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -56,20 +58,35 @@ function ModeratorSolicitation(props) {
   const width = Dimensions.get('window').width;
 
   useEffect(() => {
-    async function getPending() {
-      const {getPendingSolicitation} = props;
+    async function getCharityId() {
+      const {getModerator} = props;
       const moderatorId = (await getUser()).moderatorId;
       setModeratorIdt(moderatorId);
-      await getPendingSolicitation(moderatorId);
-      setSolicitationFlag(true);
+      await getModerator(moderatorId);
+      setModeratorFlag(true);
     }
-    getPending();
+    getCharityId();
   }, [refresh]);
 
   useEffect(() => {
+    async function handleSolicitation() {
+      if (moderatorFlag) {
+        const {moderatorData, getModeratorSuccess} = props.solicitation;
+        if (getModeratorSuccess) {
+          const {getWaitingSolicitation} = props;
+          await getWaitingSolicitation(moderatorData.charity.idt);
+          setSolicitationFlag(true);
+        }
+      }
+      setModeratorFlag(false);
+    }
+    handleSolicitation();
+  }, [moderatorFlag]);
+
+  useEffect(() => {
     if (solicitationFlag) {
-      const {pendingSolicitationSuccess, solicitationData} = props.solicitation;
-      if (pendingSolicitationSuccess) {
+      const {waitingSolicitationSuccess, solicitationData} = props.solicitation;
+      if (waitingSolicitationSuccess) {
         setSolicitationList(solicitationData);
       }
     }
@@ -90,8 +107,8 @@ function ModeratorSolicitation(props) {
 
   useEffect(() => {
     if (acceptFlag) {
-      const {acceptSolicitationSuccess} = props.solicitation;
-      if (acceptSolicitationSuccess) {
+      const {doneSolicitationSuccess} = props.solicitation;
+      if (doneSolicitationSuccess) {
         setRefresh(!refresh);
         setVisible(false);
       }
@@ -101,8 +118,8 @@ function ModeratorSolicitation(props) {
 
   useEffect(() => {
     if (refuseFlag) {
-      const {refuseSolicitationSuccess} = props.solicitation;
-      if (refuseSolicitationSuccess) {
+      const {cancelModeratorSolicitationSuccess} = props.solicitation;
+      if (cancelModeratorSolicitationSuccess) {
         setRefresh(!refresh);
         setVisible(false);
       }
@@ -167,14 +184,14 @@ function ModeratorSolicitation(props) {
     );
   }
 
-  async function handleAccept(idSolicitation) {
-    const {acceptSolicitation} = props;
-    await acceptSolicitation(idSolicitation, moderatorIdt);
+  async function handleDone(idSolicitation) {
+    const {doneSolicitation} = props;
+    await doneSolicitation(idSolicitation, moderatorIdt);
     setAcceptFlag(true);
   }
-  async function handleRefuse(idSolicitation) {
-    const {refuseSolicitation} = props;
-    await refuseSolicitation(idSolicitation, moderatorIdt);
+  async function handleCancel(idSolicitation) {
+    const {cancelModeratorSolicitation} = props;
+    await cancelModeratorSolicitation(idSolicitation, moderatorIdt);
     setRefuseFlag(true);
   }
 
@@ -208,13 +225,13 @@ function ModeratorSolicitation(props) {
           />
           <BoxButton>
             <RefuseButtonModal
-              onPress={() => handleRefuse(selectedSolicitation?.id)}>
-              <RefuseTextButtonModal>Rejeitar</RefuseTextButtonModal>
+              onPress={() => handleCancel(selectedSolicitation?.id)}>
+              <RefuseTextButtonModal>Cancelar</RefuseTextButtonModal>
             </RefuseButtonModal>
             <AcceptButtonModal
-              onPress={() => handleAccept(selectedSolicitation?.id)}>
+              onPress={() => handleDone(selectedSolicitation?.id)}>
               <AcceptTextButtonModal weight="bold">
-                Aceitar
+                Concluir
               </AcceptTextButtonModal>
             </AcceptButtonModal>
           </BoxButton>
@@ -241,15 +258,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getPendingSolicitation,
+      getWaitingSolicitation,
       getSolicitationDetail,
-      acceptSolicitation,
-      refuseSolicitation,
+      doneSolicitation,
+      cancelModeratorSolicitation,
+      getModerator,
     },
     dispatch,
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ModeratorSolicitation);
+export default connect(mapStateToProps, mapDispatchToProps)(ModeratorDone);

@@ -64,7 +64,7 @@ export const PageModal = styled.View`
 
 export const ImageItemModal = styled.Image`
   width: ${width * 0.84}px;
-  height: ${height * 0.3};
+  height: ${height * 0.3}px;
 `;
 
 export const DescriptionItemModal = styled(TextPoppins)`

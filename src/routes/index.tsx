@@ -3,8 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AuthRoutes} from './auth.routes';
 import {MainTabRoutes} from './main.tab.routes';
-import {StatusBar} from 'react-native';
+import {SafeAreaView, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadScreen from '../screens/LoadScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -33,12 +34,12 @@ export function Routes() {
         translucent
         backgroundColor={'transparent'}
       />
-
       <Navigator
-        initialRouteName="Login"
+        initialRouteName="Load"
         screenOptions={{headerShown: false, gestureEnabled: false}}>
         <Screen name="Login" component={AuthRoutes} />
         <Screen name="Main" component={MainTabRoutes} />
+        <Screen name="Load" component={LoadScreen} />
       </Navigator>
     </NavigationContainer>
   );

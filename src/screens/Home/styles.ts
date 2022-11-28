@@ -19,6 +19,7 @@ export const Container = styled.View`
 export const HeaderBox = styled.View`
   flex-direction: row;
   width: 100%;
+  justify-content: space-between;
 `;
 
 export const HeaderTextBox = styled.View`
@@ -34,7 +35,7 @@ export const NameText = styled(TextPoppins)`
 `;
 
 export const BellIconBox = styled.View`
-  width: 64%;
+ 
   flex-direction: row-reverse;
   align-items: center;
 `;

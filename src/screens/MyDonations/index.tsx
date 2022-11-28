@@ -171,7 +171,6 @@ function MyDonations(props) {
   }
 
   function renderPageItem(item, index) {
-    console.log(item);
     return (
       <PageModal>
         <ImageItemModal
@@ -181,7 +180,8 @@ function MyDonations(props) {
         <SubtitleModal>Descrição</SubtitleModal>
         <DescriptionItemModal>{item.desc}</DescriptionItemModal>
         <ValidityTextModal>
-          Validade: {item.expirationDate.split('T')[0]}
+          Validade:{' '}
+          {item.expirationDate.split('T')[0].split('-').reverse().join('/')}
         </ValidityTextModal>
         {detailData?.status !== 'DONE' && detailData?.status !== 'CANCELED' ? (
           <CancelButton onPress={() => handleCancel(item.solicitationId)}>
