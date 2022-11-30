@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-
+import {Alert} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -19,6 +19,7 @@ import {
   RowDivide2,
 } from './styles';
 import {register} from '../../actions/Auth';
+import {useNavigation} from '@react-navigation/native';
 
 function SignUp(props: any) {
   const [name, setName] = useState('');
@@ -36,9 +37,12 @@ function SignUp(props: any) {
   const [passVisible, setPassVisible] = useState(true);
   const [registerFlag, setRegisterFlag] = useState(false);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     async function initialize() {
       await initializeAxios();
+      cleanFields();
     }
     initialize();
   }, []);
@@ -46,8 +50,22 @@ function SignUp(props: any) {
   useEffect(() => {
     if (registerFlag) {
       const {auth} = props;
-      console.log(auth);
+      const {registerError, registerSuccess, errorMessage} = auth;
+      if (registerSuccess) {
+        Alert.alert('Sucesso', 'Cadastro realizado com sucesso!', [
+          {
+            text: 'Ir para o login',
+            onPress: () => {
+              cleanFields();
+              navigation.navigate('SignIn');
+            },
+          },
+        ]);
+      } else if (registerError) {
+        Alert.alert('Erro', errorMessage);
+      }
     }
+    setRegisterFlag(false);
   }, [registerFlag]);
 
   async function handleRegister() {
@@ -64,6 +82,22 @@ function SignUp(props: any) {
 
     await register(address, '15000', cpf, email, name, phone, pass);
     setRegisterFlag(true);
+  }
+
+  async function cleanFields() {
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCpf('');
+    setCep('');
+    setUf('');
+    setCity('');
+    setDistrict('');
+    setStreet('');
+    setNumber('');
+    setComplement('');
+    setPass('');
+    setPassVisible(true);
   }
 
   return (

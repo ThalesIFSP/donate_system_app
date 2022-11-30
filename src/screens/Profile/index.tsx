@@ -9,15 +9,17 @@ import {
 } from './styles';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
-import {getUser} from '../../routes';
+import {getUser, logout} from '../../routes';
 
 function Profile() {
   const [isModerator, setIsModerator] = useState(false);
+  const [username, setUsername] = useState('');
   const navigation = useNavigation();
 
   useEffect(() => {
     async function getUserInfo() {
       const user = await getUser();
+      setUsername(user.name);
       setIsModerator(user.moderatorId);
     }
     getUserInfo();
@@ -71,13 +73,16 @@ function Profile() {
     },
     {
       title: 'Sair',
-      onPress: () => navigation.navigate('Login'),
+      onPress: async () => {
+        await logout();
+        navigation.navigate('Load');
+      },
     },
   ];
 
   return (
     <Container>
-      <TitleName>Petrucio da Silva</TitleName>
+      <TitleName>{username}</TitleName>
       <ConfigList
         data={configOptions}
         renderItem={({item, index}) => renderConfigItem(item, index)}

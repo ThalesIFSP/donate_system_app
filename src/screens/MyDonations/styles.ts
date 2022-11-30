@@ -58,6 +58,21 @@ export const PickupText = styled(TextPoppins)`
 
 export const PickupModalBox = styled.View`
   flex-direction: row;
+  width: 80%;
+`;
+
+export const CharityLabel = styled(TextPoppins)`
+  font-size: ${RFValue(16)}px;
+  margin-right: 2%;
+`;
+
+export const CharityText = styled(TextPoppins)`
+  font-size: ${RFValue(16)}px;
+`;
+
+export const CharityModalBox = styled.View`
+  flex-direction: row;
+  width: 80%;
 `;
 
 export const StatusLabel = styled(TextPoppins)`
@@ -68,7 +83,6 @@ export const StatusLabel = styled(TextPoppins)`
 export const StatusText = styled(TextPoppins)<StatusColorProps>`
   font-size: ${RFValue(16)}px;
   color: ${({color}) => color};
-
 `;
 
 export const StatusModalBox = styled.View`
@@ -123,11 +137,16 @@ export const AddressTextModal = styled(TextPoppins)`
 `;
 
 export const CancelButton = styled.TouchableOpacity`
-  width: 100%;
-  background-color: '#FF0000';
-  text-align: center;
+  background-color: transparent;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 8%;
+  padding-right: 8%;
+  border: 1px solid red;
+  align-items: center;
 `;
 
 export const CancelText = styled(TextPoppins)`
-  font-size: ${RFValue(16)}px;
+  color: red;
+  font-size: ${RFValue(18)}px;
 `;

@@ -1,24 +1,26 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 
 import {Container, DonationPhrase, Logo, LogoBox, WelcomeText} from './styles';
 import LogoQuad from '../../../assets/logos/logoQuadrado.png';
 import {ActivityIndicator} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {getUser} from '../../routes';
 import {initializeAxios} from '../../api/base';
 
 function LoadScreen() {
   const navigation = useNavigation();
-
-  useEffect(() => {
-    async function handleNavigate() {
-      await initializeAxios();
-      const user = await getUser();
-
-      navigation.navigate(user ? 'Main' : 'Login');
-    }
-    handleNavigate();
-  }, []);
+  
+  useFocusEffect(
+    useCallback(() => {
+      async function handleNavigate() {
+        await initializeAxios();
+        const user = await getUser();
+        console.log('Oi');
+        navigation.navigate(user ? 'Main' : 'Login');
+      }
+      handleNavigate();
+    }, []),
+  );
 
   const phrases = [
     'Deve-se doar com a alma livre, simples, apenas por amor, espontaneamente!',

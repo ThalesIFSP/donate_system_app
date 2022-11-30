@@ -119,7 +119,7 @@ function MyNotifications(props) {
         setVisibleDetail(true);
       }
       const {getCharitySuccess, charityData} = props.charity;
-      if (getCharitySuccess) {
+      if (getCharitySuccess && charityName !== 'false') {
         setCharityName(charityData.name);
       }
     }
@@ -139,9 +139,14 @@ function MyNotifications(props) {
   }
 
   async function openDetail(solicitationId: number, charityId) {
+    setCharityName('');
     const {getSolicitationDetail, getCharity} = props;
     await getSolicitationDetail(solicitationId);
-    await getCharity(charityId);
+    if (charityId) {
+      await getCharity(charityId);
+    } else {
+      setCharityName('false');
+    }
     setDetailFlag(true);
   }
 
@@ -189,7 +194,12 @@ function MyNotifications(props) {
 
   return (
     <Container>
-      <Header title="NOTIFICAÇÕES" onBackPress={() => navigation.goBack()} />
+      <Header
+        title="NOTIFICAÇÕES"
+        onBackPress={() => {
+          navigation.goBack();
+        }}
+      />
 
       <Modal visible={visibleDetail}>
         <ModalContainer>
@@ -200,11 +210,14 @@ function MyNotifications(props) {
             onBackPress={() => setVisibleDetail(false)}
             marginTop={'0px'}
           />
-
-          <CharityBox>
-            <CharityLabel weight="bold">Instituição:</CharityLabel>
-            <CharityText>{charityName}</CharityText>
-          </CharityBox>
+          {charityName !== 'false' ? (
+            <CharityBox>
+              <CharityLabel weight="bold">Instituição:</CharityLabel>
+              <CharityText>{charityName}</CharityText>
+            </CharityBox>
+          ) : (
+            <></>
+          )}
 
           <StatusModalBox>
             <StatusLabel weight="bold">Status:</StatusLabel>

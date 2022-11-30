@@ -10,6 +10,9 @@ import {
   AnonymousText,
   CancelButton,
   CancelText,
+  CharityLabel,
+  CharityModalBox,
+  CharityText,
   Container,
   DescriptionItemModal,
   DonationBox,
@@ -38,7 +41,7 @@ import {
   getSolicitationDetail,
   getSolicitationsByUser,
 } from '../../actions/Solicitation';
-import {Dimensions, FlatList, Modal, Text} from 'react-native';
+import {Dimensions, FlatList, Modal, Alert} from 'react-native';
 import {getUser} from '../../routes';
 
 const {width, height} = Dimensions.get('window');
@@ -50,6 +53,7 @@ function MyDonations(props) {
   const [detailData, setDetailData] = useState();
   const [detailFlag, setDetailFlag] = useState(false);
   const [cancelFlag, setCancelFlag] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const navigation = useNavigation();
 
@@ -97,7 +101,7 @@ function MyDonations(props) {
 
   useEffect(() => {
     getSolicitations();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     async function getSolicitations() {
@@ -118,7 +122,7 @@ function MyDonations(props) {
     if (cancelFlag) {
       const {cancelSolicitationSuccess} = props.solicitation;
       if (cancelSolicitationSuccess) {
-        getSolicitations();
+        setRefresh(!refresh);
         setVisibleDetail(false);
       }
     }
@@ -148,10 +152,24 @@ function MyDonations(props) {
   }
 
   async function handleCancel(idSolicitation) {
-    const {cancelSolicitation} = props;
-    const user = await getUser();
-    await cancelSolicitation(idSolicitation, user.idt);
-    setCancelFlag(true);
+    Alert.alert(
+      'Cancelar',
+      'Tem certeza que deseja cancelar sua solicitação?',
+      [
+        {
+          text: 'Sim',
+          onPress: async () => {
+            const {cancelSolicitation} = props;
+            const user = await getUser();
+            await cancelSolicitation(idSolicitation, user.idt);
+            setCancelFlag(true);
+          },
+        },
+        {
+          text: 'Não',
+        },
+      ],
+    );
   }
 
   function renderItem(item, index) {
@@ -212,6 +230,23 @@ function MyDonations(props) {
               {statusHuman[detailData?.status]}
             </StatusText>
           </StatusModalBox>
+          {detailData?.history ? (
+            detailData.history[detailData.history.length - 1].charityId ? (
+              <CharityModalBox>
+                <CharityLabel weight="bold">Instituição:</CharityLabel>
+                <CharityText>
+                  {
+                    detailData?.history[detailData.history.length - 1].charityId
+                      ?.name
+                  }
+                </CharityText>
+              </CharityModalBox>
+            ) : (
+              <></>
+            )
+          ) : (
+            <></>
+          )}
 
           <AnonymousModalBox>
             <AnonymousLabel weight="bold">Anônima:</AnonymousLabel>

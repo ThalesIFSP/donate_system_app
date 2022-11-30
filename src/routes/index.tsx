@@ -26,6 +26,10 @@ export async function getUser() {
   return userValue ? JSON.parse(userValue) : '';
 }
 
+export async function logout() {
+  await AsyncStorage.setItem('@user', '');
+}
+
 export function Routes() {
   return (
     <NavigationContainer>

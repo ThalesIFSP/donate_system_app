@@ -238,7 +238,7 @@ function ModeratorDone(props) {
         </ContainerModal>
       </Modal>
       <Header
-        title="SOLICITAÇÕES PENDENTES"
+        title="SOLICITAÇÕES ABERTAS"
         onBackPress={() => navigation.goBack()}
       />
       <FlatList

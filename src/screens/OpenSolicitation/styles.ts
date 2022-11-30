@@ -195,3 +195,60 @@ export const SolicitationText = styled(TextPoppins)`
   font-size: ${RFValue(22)}px;
   text-align: center;
 `;
+
+export const InputButton = styled.TouchableOpacity``;
+
+export const ContainerModalAddress = styled.View`
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.5);
+`;
+
+export const FormAddress = styled.View`
+  margin: 15% 5% 0 5%;
+  background-color: white;
+  border-radius: 20px;
+  border: 1px solid #c1c1c1;
+  padding: 5%;
+  elevation: 5;
+`;
+
+export const RowBox = styled.View`
+  width: 100%;
+  flex-direction: row;
+`;
+
+export const RowDivide1 = styled.View`
+  width: 60%;
+`;
+
+export const RowDivide2 = styled.View`
+  width: 35%;
+  margin-left: 5%;
+  margin-top: 2.5%;
+`;
+
+export const HeaderModalBox = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const TitleModalAddress = styled(TextPoppins)`
+  color: black;
+  font-size: ${RFValue(20)}px;
+`;
+
+export const IconButton = styled.TouchableOpacity``;
+
+export const AddressButton = styled.TouchableOpacity`
+  border-radius: 5px;
+  background-color: #036bb9;
+  padding: 5px 0 5px 0;
+  margin-top: 10%;
+  margin-bottom: 10%;
+`;
+
+export const AddressButtonText = styled(TextPoppins)`
+  color: white;
+  font-size: ${RFValue(25)}px;
+  text-align: center;
+`;

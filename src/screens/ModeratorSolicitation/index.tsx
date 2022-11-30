@@ -137,6 +137,7 @@ function ModeratorSolicitation(props) {
   }
 
   function renderPageItem(item, index) {
+
     return (
       <PageModal key={index}>
         <ImageItemModal

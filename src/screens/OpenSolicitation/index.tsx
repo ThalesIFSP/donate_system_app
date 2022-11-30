@@ -12,6 +12,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Calendar, CalendarUtils, LocaleConfig} from 'react-native-calendars';
 import ImagePicker from 'react-native-image-crop-picker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import AddImageIcon from '../../../assets/icons/add-image.svg';
 import {Input} from '../../components/Input';
@@ -22,6 +23,8 @@ import {
   AddItemButton,
   AddItemModal,
   AddItemText,
+  AddressButton,
+  AddressButtonText,
   AddTextModal,
   BackModalButton,
   BackModalText,
@@ -29,8 +32,13 @@ import {
   CalendarContainer,
   Container,
   ContainerModal,
+  ContainerModalAddress,
   Form,
+  FormAddress,
+  HeaderModalBox,
+  IconButton,
   InputBox,
+  InputButton,
   InputLabel,
   InstitutionAddress,
   InstitutionBox,
@@ -41,12 +49,16 @@ import {
   ItemBox,
   ItemTitle,
   ItemValidity,
+  RowBox,
+  RowDivide1,
+  RowDivide2,
   SelectDateButton,
   SelectDateText,
   SelectInstitutionText,
   SolicitationButton,
   SolicitationText,
   SubtitleText,
+  TitleModalAddress,
   TitleText,
 } from './styles';
 import {RadioButton} from '../../components/RadioButton';
@@ -120,13 +132,23 @@ function OpenSolicitation(props) {
   const [expirationDate, setExpirationDate] = useState('');
   const [institutionFlag, setInstitutionFlag] = useState(false);
   const [charities, setCharities] = useState([]);
+  //address
+  const [address, setAddress] = useState('');
+  const [addressVisible, setAddressVisible] = useState(false);
+  const [cep, setCep] = useState('');
+  const [uf, setUf] = useState('');
+  const [city, setCity] = useState('');
+  const [district, setDistrict] = useState('');
+  const [street, setStreet] = useState('');
+  const [number, setNumber] = useState('');
+  const [complement, setComplement] = useState('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
     async function getInstitutions() {
       const {getAllCharities} = props;
-
+      cleanFields();
       await getAllCharities();
       setInstitutionFlag(true);
     }
@@ -136,7 +158,19 @@ function OpenSolicitation(props) {
   useEffect(() => {
     if (createFlag) {
       const {solicitation} = props;
-      console.log(solicitation);
+      const {createSolicitationSuccess, createSolicitationError} = solicitation;
+
+      if (createSolicitationSuccess) {
+        Alert.alert('Sucesso', 'Sua solicitação foi cadastrada.', [
+          {text: 'Ok', onPress: () => navigation.navigate('Home')},
+        ]);
+        cleanFields();
+      } else if (createSolicitationError) {
+        Alert.alert(
+          'Erro',
+          'Verifique se adicionou os itens e selecionou ao menos 1 instituição.',
+        );
+      }
     }
     setCreateFlag(false);
   }, [createFlag]);
@@ -151,6 +185,34 @@ function OpenSolicitation(props) {
     }
     setInstitutionFlag(false);
   }, [institutionFlag]);
+
+  function cleanFields() {
+    setDonateList([]);
+    setModalVisible(false);
+    setCalendarVisible(false);
+    setValidity('');
+    setDateOption(null);
+    setDescription('');
+    setWithdraw(false);
+    setInstitutionSelected([]);
+    setLoad(false);
+    setAnonymous(false);
+    setImagePreview('');
+    setImages([]);
+    setCreateFlag(false);
+    setExpirationDate('');
+    setInstitutionFlag(false);
+    //address
+    setAddress('');
+    setAddressVisible(false);
+    setCep('');
+    setUf('');
+    setCity('');
+    setDistrict('');
+    setStreet('');
+    setNumber('');
+    setComplement('');
+  }
 
   function renderItem(item: any, index: any) {
     var title =
@@ -235,7 +297,9 @@ function OpenSolicitation(props) {
             );
           }
         }}>
-        <InstitutionLogo source={{uri: institution.logo}} />
+        <InstitutionLogo
+          source={{uri: 'data:image/png;base64, ' + institution.logo}}
+        />
         <InstitutionTextBox>
           <InstitutionText weight="bold">{institution.name}</InstitutionText>
           <InstitutionAddress>
@@ -268,7 +332,21 @@ function OpenSolicitation(props) {
 
   async function handleSubmitSolicitation() {
     const {createSolicitation} = props;
-    const address = {};
+    const address = {
+      street,
+      number,
+      district,
+      cep,
+      state: uf,
+      city,
+      complement,
+    };
+
+    const title =
+      donateList[0].title.length > 20
+        ? donateList[0].title.substring(0, 20) + '...'
+        : donateList[0].title;
+    console.log(title, '<---TITLE');
     const userId = (await getUser()).idt;
     await createSolicitation(
       address,
@@ -276,11 +354,31 @@ function OpenSolicitation(props) {
       anonymous,
       withdraw,
       donateList,
-      'title',
+      title,
       userId,
       images,
     );
     setCreateFlag(true);
+  }
+
+  async function handleAddAddress() {
+    const addressFormat =
+      street +
+      ' ' +
+      number +
+      ', ' +
+      district +
+      ' - ' +
+      cep +
+      '. ' +
+      city +
+      ' - ' +
+      uf +
+      '. ' +
+      complement;
+
+    setAddress(addressFormat);
+    setAddressVisible(false);
   }
 
   const automatizeDates = [
@@ -299,6 +397,7 @@ function OpenSolicitation(props) {
           <Calendar
             minDate={new Date().toString()}
             onDayPress={day => {
+              setExpirationDate(new Date(day.timestamp).toISOString());
               setValidity(day.dateString);
             }}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -342,6 +441,91 @@ function OpenSolicitation(props) {
             </BackModalText>
           </BackModalButton>
         </CalendarContainer>
+      </Modal>
+
+      <Modal
+        visible={addressVisible}
+        transparent
+        style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <ContainerModalAddress>
+          <FormAddress>
+            <HeaderModalBox>
+              <TitleModalAddress>Adicionar endereço</TitleModalAddress>
+              <IconButton onPress={() => setAddressVisible(false)}>
+                <AntDesign name="close" size={30} color={'black'} />
+              </IconButton>
+            </HeaderModalBox>
+            <RowBox>
+              <RowDivide1>
+                <Input
+                  placeholder={'CEP'}
+                  keyboardType={`default`}
+                  autoCapitalize={'none'}
+                  value={cep}
+                  onChangeText={setCep}
+                />
+              </RowDivide1>
+              <RowDivide2>
+                <Input
+                  placeholder={'UF'}
+                  keyboardType={`default`}
+                  autoCapitalize={'characters'}
+                  value={uf}
+                  onChangeText={setUf}
+                />
+              </RowDivide2>
+            </RowBox>
+
+            <Input
+              placeholder={'Cidade'}
+              keyboardType={`default`}
+              autoCapitalize={'words'}
+              value={city}
+              onChangeText={setCity}
+            />
+
+            <Input
+              placeholder={'Bairro'}
+              keyboardType={`default`}
+              autoCapitalize={'sentences'}
+              value={district}
+              onChangeText={setDistrict}
+            />
+
+            <RowBox>
+              <RowDivide1>
+                <Input
+                  placeholder={'Rua'}
+                  keyboardType={`default`}
+                  autoCapitalize={'sentences'}
+                  value={street}
+                  onChangeText={setStreet}
+                />
+              </RowDivide1>
+              <RowDivide2>
+                <Input
+                  placeholder={'Nº'}
+                  keyboardType={`default`}
+                  autoCapitalize={'none'}
+                  value={number}
+                  onChangeText={setNumber}
+                />
+              </RowDivide2>
+            </RowBox>
+
+            <Input
+              placeholder={'Complemento'}
+              keyboardType={`default`}
+              autoCapitalize={'none'}
+              value={complement}
+              onChangeText={setComplement}
+            />
+
+            <AddressButton onPress={() => handleAddAddress()}>
+              <AddressButtonText>Confirmar</AddressButtonText>
+            </AddressButton>
+          </FormAddress>
+        </ContainerModalAddress>
       </Modal>
 
       <AddItemModal visible={modalVisible}>
@@ -431,13 +615,17 @@ function OpenSolicitation(props) {
           setUserOption={setWithdraw}
           boldText={'bold'}
         />
-        <Input
-          value={validity && formatDate(validity)}
-          marginTop={'0px'}
-          placeholder={'Endereço'}
-          autoCapitalize={'none'}
-          editable={!!withdraw}
-        />
+        <InputButton
+          disabled={!withdraw}
+          onPress={() => setAddressVisible(true)}>
+          <Input
+            value={address}
+            marginTop={'0px'}
+            placeholder={'Endereço'}
+            autoCapitalize={'none'}
+            editable={false}
+          />
+        </InputButton>
 
         <SelectInstitutionText>
           Selecione até 10 instituições para priorizar

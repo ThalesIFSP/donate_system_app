@@ -32,7 +32,7 @@ export function createSolicitation(
   address,
   assortment,
   isNameless,
-  isPickup,
+  isPickUp,
   items,
   title,
   userId,
@@ -59,13 +59,13 @@ export function createSolicitation(
       var solicitationData = {
         assortment: assortmentString,
         isNameless,
-        isPickup,
+        isPickUp,
         items: itemsModel,
         title,
         userId,
       };
 
-      if (isPickup) {
+      if (isPickUp) {
         solicitationData = {
           ...solicitationData,
           address,

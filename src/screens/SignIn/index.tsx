@@ -33,7 +33,7 @@ function SignIn(props) {
   useEffect(() => {
     async function handleNavigate(user) {
       await setUser(user);
-      navigation.navigate('Main');
+      navigation.navigate('Load');
     }
 
     if (loginFlag) {
